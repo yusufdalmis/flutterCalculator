@@ -21,5 +21,12 @@ void main() {
 
     final resultText = tester.widget<Text>(find.byKey(const ValueKey('resultText')));
     expect(resultText.data, '4');
+
+    await tester.tap(find.text('C'));
+    await tester.tap(find.text('+'));
+    await tester.pump();
+
+    final equationText = tester.widget<Text>(find.byKey(const ValueKey('equationText')));
+    expect(equationText.data, '0+');
   });
 }

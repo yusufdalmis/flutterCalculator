@@ -38,7 +38,13 @@ class _ScientificCalculatorPageState extends State<ScientificCalculatorPage> {
   void _append(String value) {
     setState(() {
       if (equation == '0') {
-        equation = value;
+        if (RegExp(r'^\d$').hasMatch(value) || value == '.') {
+          equation = value;
+        } else if (value == '+' || value == '-' || value == '×' || value == '÷' || value == '^') {
+          equation = '0$value';
+        } else {
+          equation = value;
+        }
       } else {
         equation += value;
       }
@@ -120,6 +126,7 @@ class _ScientificCalculatorPageState extends State<ScientificCalculatorPage> {
                             alignment: Alignment.centerRight,
                             child: Text(
                               equation,
+                              key: const ValueKey('equationText'),
                               style: const TextStyle(
                                 color: Colors.white70,
                                 fontSize: 28,
@@ -263,7 +270,7 @@ class CustomCalcButton extends StatelessWidget {
     required this.backgroundColor,
     this.textColor = Colors.white,
     required this.onTap,
-  });
+  }) : assert(text != null || icon != null);
 
   final String? text;
   final IconData? icon;
@@ -283,7 +290,7 @@ class CustomCalcButton extends StatelessWidget {
           child: icon != null
               ? Icon(icon, color: textColor, size: 24)
               : Text(
-                  text ?? '',
+                  text!,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: textColor,
