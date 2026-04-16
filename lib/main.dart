@@ -81,8 +81,8 @@ class _ScientificCalculatorPageState extends State<ScientificCalculatorPage> {
   String _formatResult(double value) {
     if (value.isNaN || value.isInfinite) return 'Error';
     if (value == value.roundToDouble()) return value.toInt().toString();
-    final asString = value.toStringAsPrecision(12);
-    return double.parse(asString).toString();
+    final fixed = value.toStringAsFixed(10);
+    return fixed.replaceFirst(RegExp(r'0+$'), '').replaceFirst(RegExp(r'\.$'), '');
   }
 
   @override
@@ -133,6 +133,7 @@ class _ScientificCalculatorPageState extends State<ScientificCalculatorPage> {
                             alignment: Alignment.centerRight,
                             child: Text(
                               result,
+                              key: const ValueKey('resultText'),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 56,

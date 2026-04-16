@@ -19,6 +19,7 @@ void main() {
     await tester.tap(find.text('='));
     await tester.pump();
 
-    expect(find.text('4'), findsWidgets);
+    final resultText = tester.widget<Text>(find.byKey(const ValueKey('resultText')));
+    expect(resultText.data, '4');
   });
 }
