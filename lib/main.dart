@@ -11,6 +11,7 @@ class CalculatorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Scientific Calculator',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: Colors.black),
       home: const ScientificCalculatorPage(),
@@ -31,6 +32,7 @@ class _ScientificCalculatorPageState extends State<ScientificCalculatorPage> {
   static const Color _operatorColor = Color(0xFFFF9800);
   static const Color _actionRed = Color(0xFFF44336);
   static const Color _actionGreen = Color(0xFF4CAF50);
+  static const Set<String> _operators = {'+', '-', '×', '÷', '^'};
 
   String equation = '0';
   String result = '0';
@@ -40,7 +42,7 @@ class _ScientificCalculatorPageState extends State<ScientificCalculatorPage> {
       if (equation == '0') {
         if (RegExp(r'^\d$').hasMatch(value) || value == '.') {
           equation = value;
-        } else if (value == '+' || value == '-' || value == '×' || value == '÷' || value == '^') {
+        } else if (_operators.contains(value)) {
           equation = '0$value';
         } else {
           equation = value;
@@ -269,6 +271,8 @@ class _ScientificCalculatorPageState extends State<ScientificCalculatorPage> {
 }
 
 class CustomCalcButton extends StatelessWidget {
+  static const double _buttonBorderRadius = 8;
+
   const CustomCalcButton({
     super.key,
     this.text,
@@ -288,9 +292,9 @@ class CustomCalcButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: backgroundColor,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(_buttonBorderRadius),
       child: InkWell(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(_buttonBorderRadius),
         onTap: onTap,
         child: Center(
           child: icon != null
