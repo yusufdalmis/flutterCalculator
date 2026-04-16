@@ -77,7 +77,13 @@ class _ScientificCalculatorPageState extends State<ScientificCalculatorPage> {
       setState(() {
         result = _formatResult(eval);
       });
-    } catch (_) {
+    } on FormatException catch (error) {
+      debugPrint('Calculator format error: $error');
+      setState(() {
+        result = 'Error';
+      });
+    } on Exception catch (error) {
+      debugPrint('Calculator evaluation error: $error');
       setState(() {
         result = 'Error';
       });

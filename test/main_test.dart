@@ -3,15 +3,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_calculator/main.dart';
 
 void main() {
-  testWidgets('renders scientific calculator layout and computes simple operation', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('renders scientific calculator layout', (WidgetTester tester) async {
     await tester.pumpWidget(const CalculatorApp());
 
     expect(find.text('Scientific Calculator'), findsOneWidget);
     expect(find.text('sin('), findsOneWidget);
     expect(find.text('cos('), findsOneWidget);
     expect(find.byIcon(Icons.backspace_outlined), findsOneWidget);
+  });
+
+  testWidgets('computes simple addition and keeps leading operator format', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const CalculatorApp());
 
     await tester.tap(find.text('2'));
     await tester.tap(find.text('+'));
@@ -28,5 +32,18 @@ void main() {
 
     final equationText = tester.widget<Text>(find.byKey(const ValueKey('equationText')));
     expect(equationText.data, '0+');
+  });
+
+  testWidgets('shows error for invalid math result', (WidgetTester tester) async {
+    await tester.pumpWidget(const CalculatorApp());
+
+    await tester.tap(find.text('1'));
+    await tester.tap(find.text('÷'));
+    await tester.tap(find.text('0'));
+    await tester.tap(find.text('='));
+    await tester.pump();
+
+    final resultText = tester.widget<Text>(find.byKey(const ValueKey('resultText')));
+    expect(resultText.data, 'Error');
   });
 }
